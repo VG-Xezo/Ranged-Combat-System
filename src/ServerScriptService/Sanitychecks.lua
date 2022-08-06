@@ -27,4 +27,8 @@ function Sanitychecks.checkDistance(player: Player, pos1: Vector3, pos2: Vector3
     end
 end
 
+function Sanitychecks.reportPlayer(player: Player)
+    warnPlayer(player)
+end
+
 return Sanitychecks

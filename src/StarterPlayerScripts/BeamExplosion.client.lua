@@ -10,6 +10,12 @@ if not Character then
 	Character = Players.LocalPlayer.Character
 end
 
+local humanoid = Character:WaitForChild("Humanoid")
+local Animator = humanoid:WaitForChild("Animator")
+
+local beamAnimationTrack = Animator:LoadAnimation(Character:WaitForChild("Animations").BeamExplosionAnimation)
+beamAnimationTrack.Priority = Enum.AnimationPriority.Action
+
 local MouseModule = require(script.Parent:WaitForChild("Mouse"))
 
 local BeamExplosionRemote = ReplicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("BeamExplosion")
@@ -76,10 +82,13 @@ local function fireBeamExplosion(actionName: string, inputState: Enum, inputObje
 			end
 
 			if (Character:FindFirstChild("HumanoidRootPart").Position - hitPosition).Magnitude < MAX_CAST_DISTANCE then
+				beamAnimationTrack:Play()
+				humanoid.WalkSpeed = 0
 				BeamExplosionRemote:FireServer(hitPosition)
 			end
 			
 			task.wait(2.5)
+			humanoid.WalkSpeed = 16
 			AttackDebounce = false
 		end
 	end
