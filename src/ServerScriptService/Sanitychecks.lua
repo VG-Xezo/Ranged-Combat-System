@@ -1,3 +1,4 @@
+-- Anti cheat and Server-Side Sanity Checks system
 local Sanitychecks = {}
 local PlayerWarns = {}
 

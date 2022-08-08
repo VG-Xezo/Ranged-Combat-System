@@ -24,6 +24,9 @@ local BeamExplosionVfx = ReplicatedStorage:WaitForChild("VFX"):WaitForChild("Bea
 local ACTION_BEAM_EXPLOSION = "Beam Explosion"
 local AttackDebounce = false
 local MAX_CAST_DISTANCE = 50
+local MOVE_COST = 100
+
+local PlayerStamina = ReplicatedStorage:WaitForChild("StaminasFolder"):WaitForChild(Players.LocalPlayer.UserId)
 
 local function checkHumanoid(instance: Part)
 	local characterModel = instance:FindFirstAncestorOfClass("Model")
@@ -56,6 +59,7 @@ end
 local function fireBeamExplosion(actionName: string, inputState: Enum, inputObject)
     if actionName == ACTION_BEAM_EXPLOSION and inputState == Enum.UserInputState.Begin then
 		if not AttackDebounce then
+			if PlayerStamina.Value < MOVE_COST then return end
 			AttackDebounce = true
 
 			local mouseLocation = MouseModule.getWorldMousePosition()
@@ -88,8 +92,12 @@ local function fireBeamExplosion(actionName: string, inputState: Enum, inputObje
 			end
 			
 			task.wait(2.5)
-			humanoid.WalkSpeed = 16
 			AttackDebounce = false
+		end
+	end
+	if actionName == ACTION_BEAM_EXPLOSION and inputState == Enum.UserInputState.End then
+		if humanoid.WalkSpeed == 0 then
+			humanoid.WalkSpeed = 16
 		end
 	end
 end

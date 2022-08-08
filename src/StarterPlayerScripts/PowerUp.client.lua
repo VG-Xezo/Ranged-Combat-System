@@ -1,0 +1,1 @@
+-- Gives player speed and jump boost

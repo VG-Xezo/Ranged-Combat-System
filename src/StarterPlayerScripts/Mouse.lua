@@ -1,3 +1,4 @@
+-- Provides abstractions for the Player Mouse
 local UserInputService = game:GetService("UserInputService")
 
 local Mouse = {}
