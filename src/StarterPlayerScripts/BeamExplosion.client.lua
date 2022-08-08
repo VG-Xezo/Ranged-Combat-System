@@ -26,6 +26,8 @@ local AttackDebounce = false
 local MAX_CAST_DISTANCE = 50
 local MOVE_COST = 100
 
+local ORIGINAL_SPEED = 0
+
 local PlayerStamina = ReplicatedStorage:WaitForChild("StaminasFolder"):WaitForChild(Players.LocalPlayer.UserId)
 
 local function checkHumanoid(instance: Part)
@@ -56,7 +58,7 @@ local function generateBeamExplosionVfx(Position: Vector3)
 	end
 end
 
-local function fireBeamExplosion(actionName: string, inputState: Enum, inputObject)
+local function fireBeamExplosion(actionName: string, inputState: Enum)
     if actionName == ACTION_BEAM_EXPLOSION and inputState == Enum.UserInputState.Begin then
 		if not AttackDebounce then
 			if PlayerStamina.Value < MOVE_COST then return end
@@ -87,6 +89,7 @@ local function fireBeamExplosion(actionName: string, inputState: Enum, inputObje
 
 			if (Character:FindFirstChild("HumanoidRootPart").Position - hitPosition).Magnitude < MAX_CAST_DISTANCE then
 				beamAnimationTrack:Play()
+				ORIGINAL_SPEED = humanoid.WalkSpeed
 				humanoid.WalkSpeed = 0
 				BeamExplosionRemote:FireServer(hitPosition)
 			end
@@ -97,7 +100,7 @@ local function fireBeamExplosion(actionName: string, inputState: Enum, inputObje
 	end
 	if actionName == ACTION_BEAM_EXPLOSION and inputState == Enum.UserInputState.End then
 		if humanoid.WalkSpeed == 0 then
-			humanoid.WalkSpeed = 16
+			humanoid.WalkSpeed = ORIGINAL_SPEED
 		end
 	end
 end
