@@ -8,7 +8,7 @@ function updateStaminas()
         for _, staminaValue in pairs(StaminasFolder:GetChildren()) do
             if staminaValue:IsA("IntValue") then
                 if staminaValue.Value < 1000 then
-                    staminaValue.Value += 25
+                    staminaValue.Value += 10
                 end
             end
             task.wait()
