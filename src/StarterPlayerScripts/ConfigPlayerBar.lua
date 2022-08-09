@@ -10,10 +10,9 @@ local HealthBar = PlayerBarGui.HealthBarBackground
 local ConfigPlayerBar = {}
 
 function ConfigPlayerBar.LessStamina(displayTime: number)
-    local ORIGINAL_BAR_COLOR = StaminaBar.BackgroundColor3
     StaminaBar.BackgroundColor3 = Color3.fromRGB(172, 28, 28)
     task.wait(displayTime)
-    StaminaBar.BackgroundColor3 = ORIGINAL_BAR_COLOR
+    StaminaBar.BackgroundColor3 = Color3.fromRGB(0, 149, 223)
 end
 
 return ConfigPlayerBar

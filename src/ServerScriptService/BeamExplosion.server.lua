@@ -1,6 +1,8 @@
+local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local BeamExplosionRemote = ReplicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("BeamExplosion")
+local ShakeCameraEvent = game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("ShakeCamera")
 
 local Cooldown = 2.5
 local MAX_CAST_DISTANCE = 50
@@ -30,12 +32,16 @@ function BeamExplosion(playerFired: Player, ExplosionPosition: Vector3)
                 if HumanoidRootPart and Humanoid then
                     if (HumanoidRootPart.Position - Vector3.new(ExplosionPosition.X, 1, ExplosionPosition.Z)).Magnitude <= 20 then
                         Humanoid:TakeDamage(10)
+                        local characterPlayer = Players:GetPlayerFromCharacter(characterModel)
+                        if characterPlayer then
+                            ShakeCameraEvent:FireClient(characterPlayer, 2.5)
+                        end
                     end
                 end
             end
         end
 
-
+        ShakeCameraEvent:FireClient(playerFired, 2.5)
         BeamExplosionRemote:FireAllClients(Vector3.new(ExplosionPosition.X, 1, ExplosionPosition.Z))
 
         table.insert(PlayerDebounces, playerFired.Name)
