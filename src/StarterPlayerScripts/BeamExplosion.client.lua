@@ -17,6 +17,7 @@ local beamAnimationTrack = Animator:LoadAnimation(Character:WaitForChild("Animat
 beamAnimationTrack.Priority = Enum.AnimationPriority.Action
 
 local MouseModule = require(script.Parent:WaitForChild("Mouse"))
+local PlayerBarModule = require(script.Parent:WaitForChild("ConfigPlayerBar"))
 
 local BeamExplosionRemote = ReplicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("BeamExplosion")
 local BeamExplosionVfx = ReplicatedStorage:WaitForChild("VFX"):WaitForChild("BeamExplosion")
@@ -61,7 +62,10 @@ end
 local function fireBeamExplosion(actionName: string, inputState: Enum)
     if actionName == ACTION_BEAM_EXPLOSION and inputState == Enum.UserInputState.Begin then
 		if not AttackDebounce then
-			if PlayerStamina.Value < MOVE_COST then return end
+			if PlayerStamina.Value < MOVE_COST then
+				PlayerBarModule.LessStamina(2)
+				return 
+			end
 			AttackDebounce = true
 
 			local mouseLocation = MouseModule.getWorldMousePosition()

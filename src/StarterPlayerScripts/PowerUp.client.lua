@@ -16,6 +16,8 @@ local PlayerStamina = ReplicatedStorage:WaitForChild("StaminasFolder"):WaitForCh
 local humanoid = Character:WaitForChild("Humanoid")
 local Animator = humanoid:WaitForChild("Animator")
 
+local PlayerBarModule = require(script.Parent:WaitForChild("ConfigPlayerBar"))
+
 local powerupAnimationTrack = Animator:LoadAnimation(Character:WaitForChild("Animations").PowerupAnimation)
 powerupAnimationTrack.Priority = Enum.AnimationPriority.Action
 
@@ -37,7 +39,10 @@ local function firePowerUp(actionName: string, inputState: Enum)
     if actionName == ACTION_POWERUP and inputState == Enum.UserInputState.Begin then
         if not AttackDebounce then
             AttackDebounce = true
-            if PlayerStamina.Value < MOVE_COST then return end
+            if PlayerStamina.Value < MOVE_COST then
+                PlayerBarModule.LessStamina(2)
+                return
+            end
 
             powerupAnimationTrack:Play()
             humanoid.WalkSpeed = 0
