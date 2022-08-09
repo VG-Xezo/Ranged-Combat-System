@@ -27,6 +27,7 @@ function PowerUp(playerFired: Player)
 
         Humanoid.WalkSpeed = DEFAULT_SPEED * 4
         Humanoid.JumpHeight = DEFAULT_HEIGHT * 4
+        PowerUpRemote:FireAllClients(playerFired)
 
         table.insert(PlayerDebounces, playerFired.Name)
         task.wait(Cooldown)
