@@ -28,6 +28,7 @@ local ACTION_POWERUP = "Power Up"
 local ORIGINAL_SPEED = 0
 
 local AttackDebounce = false
+local AttackCooldown = 10
 
 local function generatePowerupVfx(playerFired: Player)
     local powerUpAura = ReplicatedStorage:WaitForChild("VFX"):WaitForChild("PowerupAura").PowerupVfx:Clone()
@@ -38,11 +39,11 @@ end
 local function firePowerUp(actionName: string, inputState: Enum)
     if actionName == ACTION_POWERUP and inputState == Enum.UserInputState.Begin then
         if not AttackDebounce then
-            AttackDebounce = true
             if PlayerStamina.Value < MOVE_COST then
-                PlayerBarModule.LessStamina(2)
+                PlayerBarModule.LessStamina(.25)
                 return
             end
+            AttackDebounce = true
 
             powerupAnimationTrack:Play()
             humanoid.WalkSpeed = 0
@@ -51,7 +52,7 @@ local function firePowerUp(actionName: string, inputState: Enum)
             ORIGINAL_SPEED = humanoid.WalkSpeed
 			humanoid.WalkSpeed = 0
 
-            task.wait(10)
+            task.wait(AttackCooldown)
             AttackDebounce = false
         end
     end

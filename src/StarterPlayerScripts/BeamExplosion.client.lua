@@ -24,6 +24,7 @@ local BeamExplosionVfx = ReplicatedStorage:WaitForChild("VFX"):WaitForChild("Bea
 
 local ACTION_BEAM_EXPLOSION = "Beam Explosion"
 local AttackDebounce = false
+local AttackCooldown = 2.5
 local MAX_CAST_DISTANCE = 50
 local MOVE_COST = 100
 
@@ -63,7 +64,7 @@ local function fireBeamExplosion(actionName: string, inputState: Enum)
     if actionName == ACTION_BEAM_EXPLOSION and inputState == Enum.UserInputState.Begin then
 		if not AttackDebounce then
 			if PlayerStamina.Value < MOVE_COST then
-				PlayerBarModule.LessStamina(2)
+				PlayerBarModule.LessStamina(.25)
 				return 
 			end
 			AttackDebounce = true
@@ -98,7 +99,7 @@ local function fireBeamExplosion(actionName: string, inputState: Enum)
 				BeamExplosionRemote:FireServer(hitPosition)
 			end
 			
-			task.wait(2.5)
+			task.wait(AttackCooldown)
 			AttackDebounce = false
 		end
 	end
