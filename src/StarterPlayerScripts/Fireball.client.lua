@@ -60,6 +60,7 @@ local function fireFireball(actionName: string, inputState: Enum)
         if not AttackDebounce then
             if PlayerStamina.Value < MOVE_COST then
                 PlayerBarModule.LessStamina(.25)
+				return
             end
             AttackDebounce = true
 
