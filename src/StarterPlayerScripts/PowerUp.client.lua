@@ -52,7 +52,7 @@ local function firePowerUp(actionName: string, inputState: Enum)
             ORIGINAL_SPEED = humanoid.WalkSpeed
 			humanoid.WalkSpeed = 0
 
-            task.wait(AttackCooldown)
+            PlayerBarModule.AttackCooldown("PowerUp", AttackCooldown)
             AttackDebounce = false
         end
     end

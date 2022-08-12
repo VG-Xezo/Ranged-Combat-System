@@ -115,7 +115,7 @@ local function fireLaserBeams(actionName: string, inputState: Enum)
                 end
             end
 
-            task.wait(AttackCooldown)
+            PlayerBarModule.AttackCooldown("Laser", AttackCooldown)
             AttackDebounce = false
         end
     end

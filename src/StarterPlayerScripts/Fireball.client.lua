@@ -93,8 +93,7 @@ local function fireFireball(actionName: string, inputState: Enum)
                 fireballAnimationTrack:Play()
 				FireballRemote:FireServer(hitPosition)
 			end
-
-            task.wait(AttackCooldown)
+			PlayerBarModule.AttackCooldown("Fireball", AttackCooldown)
             AttackDebounce = false
         end
     end

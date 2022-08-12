@@ -99,7 +99,7 @@ local function fireBeamExplosion(actionName: string, inputState: Enum)
 				BeamExplosionRemote:FireServer(hitPosition)
 			end
 			
-			task.wait(AttackCooldown)
+			PlayerBarModule.AttackCooldown("BeamExplosion", AttackCooldown)
 			AttackDebounce = false
 		end
 	end

@@ -68,8 +68,6 @@ local function fireLightningStrike(actionName: string, inputState: Enum)
                 PlayerBarModule.LessStamina(.25)
                 return
             end
-            AttackDebounce = true
-
             local foundTarget = false
             for _, model in pairs(game.Workspace:GetChildren()) do
                 if model:IsA("Model") then
@@ -85,14 +83,17 @@ local function fireLightningStrike(actionName: string, inputState: Enum)
                     end
                 end
             end
-            if not foundTarget then return end
+            if not foundTarget then
+                return
+            end
+            AttackDebounce = true
 
             LightningRemote:FireServer()
             lightningAnimationTrack:Play()
             ORIGINAL_SPEED = humanoid.WalkSpeed
             humanoid.WalkSpeed = 0
 
-            task.wait(AttackCooldown)
+            PlayerBarModule.AttackCooldown("LightningStrikes", AttackCooldown)
             AttackDebounce = false
         end
     end
