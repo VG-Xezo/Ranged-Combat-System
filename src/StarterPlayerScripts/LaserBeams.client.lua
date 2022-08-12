@@ -1,39 +1,42 @@
+-- Services
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ContextActionService = game:GetService("ContextActionService")
 local Debris = game:GetService("Debris")
-local player = Players.LocalPlayer
 
+-- Remote Events/Replicated Storage
+local PlayerStamina = ReplicatedStorage:WaitForChild("StaminasFolder"):WaitForChild(player.UserId)
+local LaserRemote = ReplicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("Laser")
+
+-- Player vars
+local player = Players.LocalPlayer
 local Character = Players.LocalPlayer.Character
 if not Character then
 	Players.LocalPlayer.CharacterAdded:Wait()
 	Character = Players.LocalPlayer.Character
 end
-
 local humanoid = Character:WaitForChild("Humanoid")
 local Animator = humanoid:WaitForChild("Animator")
 
-local PlayerStamina = ReplicatedStorage:WaitForChild("StaminasFolder"):WaitForChild(player.UserId)
-
+-- Animation vars
 local laserAnimationTrack = Animator:LoadAnimation(Character:WaitForChild("Animations").LaserAnimation)
 laserAnimationTrack.Priority = Enum.AnimationPriority.Action
 laserAnimationTrack.Looped = true
 
-local LaserRemote = ReplicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("Laser")
+-- Modules
+local MouseModule = require(script.Parent:WaitForChild("Mouse"))
+local PlayerBarModule = require(script.Parent:WaitForChild("ConfigPlayerBar"))
 
+-- Move vars
 local MOVE_COST = 10
 local AttackDebounce = false
 local AttackCooldown = 2
 local MAX_CAST_DISTANCE = 100
-
-local MouseModule = require(script.Parent:WaitForChild("Mouse"))
-local PlayerBarModule = require(script.Parent:WaitForChild("ConfigPlayerBar"))
-
 local ACTION_LASER_BEAM = "Laser Beam"
 local isKeyDown = false
-
 local FiredTimes = 0
 
+-- Functions
 local function checkHumanoid(instance: Part)
 	local characterModel = instance:FindFirstAncestorOfClass("Model")
 	if characterModel then
@@ -92,7 +95,6 @@ local function fireLaserBeams(actionName: string, inputState: Enum)
 
                 local hitCharacter
                 local hitPosition
-
                 if spellRaycastResult then
                     hitPosition = spellRaycastResult.Position
                     if spellRaycastResult.Instance then
@@ -125,5 +127,6 @@ local function fireLaserBeams(actionName: string, inputState: Enum)
     end
 end
 
+-- Connections
 LaserRemote.OnClientEvent:Connect(generateLaserVfx)
 ContextActionService:BindAction(ACTION_LASER_BEAM, fireLaserBeams, true, Enum.KeyCode.R)

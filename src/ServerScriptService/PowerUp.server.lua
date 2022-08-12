@@ -1,20 +1,21 @@
+-- Services
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local PowerUpRemote = ReplicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("PowerUp")
 
+-- Modules
+local UpdateStaminas = require(game:GetService("ServerScriptService").UpdateStaminas)
+
+-- Move vars
 local Cooldown = 10
 local MOVE_COST = 250
 local PlayerDebounces = {}
-
 local DEFAULT_SPEED = 16
 local DEFAULT_HEIGHT = 7.2
 
-local UpdateStaminas = require(game:GetService("ServerScriptService").UpdateStaminas)
-
+-- Functions
 function PowerUp(playerFired: Player)
     if table.find(PlayerDebounces, playerFired.Name) == nil then
-        
         local staminaEnough = UpdateStaminas.decreaseStamina(playerFired, MOVE_COST)
-
         if not staminaEnough then return end
 
         local Character = playerFired.Character
@@ -22,11 +23,10 @@ function PowerUp(playerFired: Player)
             playerFired.CharacterAdded:Wait()
             Character = playerFired.Character
         end
-
         local Humanoid = Character:FindFirstChild("Humanoid")
-
         Humanoid.WalkSpeed = DEFAULT_SPEED * 4
         Humanoid.JumpHeight = DEFAULT_HEIGHT * 4
+        
         PowerUpRemote:FireAllClients(playerFired)
 
         table.insert(PlayerDebounces, playerFired.Name)

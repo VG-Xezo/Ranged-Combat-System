@@ -1,8 +1,11 @@
--- The lazy way to turn keyframes into animations
+-- Services
 local Players = game:GetService("Players")
 local KeyframeSequenceProvider = game:GetService("KeyframeSequenceProvider")
+
+-- Replicated Storage
 local KeyframesFolder = game:GetService("ReplicatedStorage"):WaitForChild("KeyframesFolder")
 
+-- Functions + Connections
 Players.PlayerAdded:Connect(function(player)
     player.CharacterAdded:Connect(function(character)
         local AnimationsFolder = Instance.new("Folder")

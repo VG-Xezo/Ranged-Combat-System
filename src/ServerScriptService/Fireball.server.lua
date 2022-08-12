@@ -1,18 +1,22 @@
+-- Services
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 local Debris = game:GetService("Debris")
 
+-- Remote Events/Replicated Storage
 local FireballRemote = ReplicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("Fireball")
 
+-- Modules
 local UpdateStaminas = require(game:GetService("ServerScriptService"):WaitForChild("UpdateStaminas"))
 local Sanitychecks = require(game:GetService("ServerScriptService"):WaitForChild("Sanitychecks"))
 
+-- Move vars
 local MOVE_COST = 75
 local MAX_CAST_DISTANCE = 75
-
 local PlayerDebounces = {}
 local Cooldown = 1.5
 
+-- Functions
 function Fireball(playerFired: Player, hitPosition: Vector3)
     if table.find(PlayerDebounces, playerFired.Name) == nil then
         local staminaEnough = UpdateStaminas.decreaseStamina(playerFired, MOVE_COST)
@@ -31,7 +35,6 @@ function Fireball(playerFired: Player, hitPosition: Vector3)
         fireballHitbox.Touched:Connect(function(hit)
             if not hit:FindFirstAncestor(playerFired.Character.Name) then
                 local humanoid = hit.Parent:FindFirstChild("Humanoid")
-                
                 if humanoid then
                     local debounce = humanoid:FindFirstChild("FireballDebounce".. playerFired.Name)
                     if not debounce then
@@ -56,4 +59,5 @@ function Fireball(playerFired: Player, hitPosition: Vector3)
     end
 end
 
+-- Connections
 FireballRemote.OnServerEvent:Connect(Fireball)

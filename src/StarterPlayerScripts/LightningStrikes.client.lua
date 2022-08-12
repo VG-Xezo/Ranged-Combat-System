@@ -1,37 +1,42 @@
+-- Services
 local Players = game:GetService("Players")
 local ContextActionService = game:GetService("ContextActionService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Debris = game:GetService("Debris")
+
+-- Remote Events/Replicated Storage
+local PlayerStamina = ReplicatedStorage:WaitForChild("StaminasFolder"):WaitForChild(player.UserId)
+local LightningRemote = ReplicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("Lightning")
+
+-- Player vars
 local player = Players.LocalPlayer
 local Character = player.Character
 if not Character then
     player.CharacterAdded:Wait()
     Character = player.Character
 end
-
-local BoltVfx = ReplicatedStorage:WaitForChild("VFX"):WaitForChild("Bolt")
-local BoltRadiusVfx = ReplicatedStorage:WaitForChild("VFX"):WaitForChild("BoltRadius")
-
 local humanoid = Character:WaitForChild("Humanoid")
 local HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
 local Animator = humanoid:WaitForChild("Animator")
 
+-- Animation/Vfx vars
+local BoltVfx = ReplicatedStorage:WaitForChild("VFX"):WaitForChild("Bolt")
+local BoltRadiusVfx = ReplicatedStorage:WaitForChild("VFX"):WaitForChild("BoltRadius")
 local lightningAnimationTrack = Animator:LoadAnimation(Character:WaitForChild("Animations").LightningAnimation)
 lightningAnimationTrack.Priority = Enum.AnimationPriority.Action
 
-local PlayerStamina = ReplicatedStorage:WaitForChild("StaminasFolder"):WaitForChild(player.UserId)
-
+-- Modules
 local PlayerBarModule = require(script.Parent:WaitForChild("ConfigPlayerBar"))
 
+-- Move vars
 local MOVE_COST = 225
 local AttackDebounce = false
 local AttackCooldown = 5
 local ORIGINAL_SPEED = 0
 local MAX_RANGE_DISTANCE = 25
-
 local ACTION_LIGHTNING = "Lightning"
-local LightningRemote = ReplicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("Lightning")
 
+-- Functions
 local function generateLightningVfx(playerVfx: Player, Target: Model, VfxType: string)
     if VfxType == "Bolt" then
         local startPos = playerVfx.Character:FindFirstChild("HumanoidRootPart").Position + Vector3.new(0, 100, 0)
@@ -39,10 +44,8 @@ local function generateLightningVfx(playerVfx: Player, Target: Model, VfxType: s
 
         local newBolt = BoltVfx:Clone()
         newBolt.Parent = game.Workspace
-
         local boltDistance = (startPos - endPos).Magnitude
 	    local boltCFrame = CFrame.lookAt(startPos, endPos) * CFrame.new(0, 0, -boltDistance / 2)
-
         newBolt.CFrame = boltCFrame
         newBolt.Size = Vector3.new(0.2, 0.2, boltDistance)
 
@@ -51,10 +54,8 @@ local function generateLightningVfx(playerVfx: Player, Target: Model, VfxType: s
     if VfxType == "Radius" then
         local newRadius = BoltRadiusVfx:Clone()
         newRadius.Parent = game.Workspace
-
         local playerHumanoid = playerVfx.Character:FindFirstChild("Humanoid")
         local playerHumanoidRootPart = playerVfx.Character:FindFirstChild("HumanoidRootPart")
-
         newRadius.Position = playerHumanoidRootPart.Position - Vector3.new(0, playerHumanoid.HipHeight, 0)
 
         Debris:AddItem(newRadius, 2)
@@ -105,5 +106,6 @@ local function fireLightningStrike(actionName: string, inputState: Enum)
     end
 end
 
+-- Connections
 LightningRemote.OnClientEvent:Connect(generateLightningVfx)
 ContextActionService:BindAction(ACTION_LIGHTNING, fireLightningStrike, true, Enum.KeyCode.E)

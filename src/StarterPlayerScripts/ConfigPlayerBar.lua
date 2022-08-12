@@ -1,15 +1,17 @@
--- Provides abstractions for interacting with player gui
+-- Services
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
+
+-- Player vars
 local player = Players.LocalPlayer
 
+-- Gui vars
 local PlayerBarGui = player:WaitForChild("PlayerGui"):WaitForChild("PlayerBarGui").PlayerBarsBackground
-
 local StaminaBar = PlayerBarGui.StaminaBarBackground.StaminaBar
 local HealthBar = PlayerBarGui.HealthBarBackground
-
 local MoveIcons = player:WaitForChild("PlayerGui"):WaitForChild("PlayerBarGui"):WaitForChild("MoveIcons")
 
+-- Module functions
 local ConfigPlayerBar = {}
 
 function ConfigPlayerBar.LessStamina(displayTime: number)
@@ -19,9 +21,9 @@ function ConfigPlayerBar.LessStamina(displayTime: number)
 end
 
 function ConfigPlayerBar.AttackCooldown(attackType: string, cooldown: number)
-    local FireballMove = MoveIcons:WaitForChild(attackType .. "Move")
-
-    FireballMove.CooldownFrame.Size = UDim2.new(1,0,1,0)
+    local MoveFrame = MoveIcons:WaitForChild(attackType .. "Move")
+    MoveFrame.CooldownFrame.Size = UDim2.new(1,0,1,0)
+    
     for i = 10, 0, -1 do
         local TargetSize = UDim2.new(1, 0, i/10, 0)
         TweenService:Create(FireballMove.CooldownFrame, TweenInfo.new(cooldown/10), {Size = TargetSize}):Play()

@@ -3,7 +3,6 @@ local Sanitychecks = {}
 local PlayerWarns = {}
 
 local function warnPlayer(player: Player)
-
     local playerWarn = PlayerWarns[player.Name]
 
     if playerWarn then
@@ -14,9 +13,6 @@ local function warnPlayer(player: Player)
     else
         PlayerWarns[player.Name] = 1
     end
-
-    print(PlayerWarns)
-
 end
 
 function Sanitychecks.checkDistance(player: Player, pos1: Vector3, pos2: Vector3, maxDistance: number)

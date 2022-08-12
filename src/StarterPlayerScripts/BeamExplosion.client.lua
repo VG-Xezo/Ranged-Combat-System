@@ -1,37 +1,41 @@
+-- Services
 local Debris = game:GetService("Debris")
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ContextActionService = game:GetService("ContextActionService")
 local TweenService = game:GetService("TweenService")
 
+-- Remote Events/Replicated Storage
+local BeamExplosionRemote = ReplicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("BeamExplosion")
+local PlayerStamina = ReplicatedStorage:WaitForChild("StaminasFolder"):WaitForChild(Players.LocalPlayer.UserId)
+
+-- Player vars
 local Character = Players.LocalPlayer.Character
 if not Character then
 	Players.LocalPlayer.CharacterAdded:Wait()
 	Character = Players.LocalPlayer.Character
 end
-
 local humanoid = Character:WaitForChild("Humanoid")
 local Animator = humanoid:WaitForChild("Animator")
 
+-- Animation/Vfx vars
 local beamAnimationTrack = Animator:LoadAnimation(Character:WaitForChild("Animations").BeamExplosionAnimation)
 beamAnimationTrack.Priority = Enum.AnimationPriority.Action
+local BeamExplosionVfx = ReplicatedStorage:WaitForChild("VFX"):WaitForChild("BeamExplosion")
 
+-- Modules
 local MouseModule = require(script.Parent:WaitForChild("Mouse"))
 local PlayerBarModule = require(script.Parent:WaitForChild("ConfigPlayerBar"))
 
-local BeamExplosionRemote = ReplicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("BeamExplosion")
-local BeamExplosionVfx = ReplicatedStorage:WaitForChild("VFX"):WaitForChild("BeamExplosion")
-
+-- Move vars
 local ACTION_BEAM_EXPLOSION = "Beam Explosion"
 local AttackDebounce = false
 local AttackCooldown = 2.5
 local MAX_CAST_DISTANCE = 50
 local MOVE_COST = 100
-
 local ORIGINAL_SPEED = 0
 
-local PlayerStamina = ReplicatedStorage:WaitForChild("StaminasFolder"):WaitForChild(Players.LocalPlayer.UserId)
-
+-- Functions
 local function checkHumanoid(instance: Part)
 	local characterModel = instance:FindFirstAncestorOfClass("Model")
 	if characterModel then
@@ -47,7 +51,6 @@ local function generateBeamExplosionVfx(Position: Vector3)
 	local newBeamExplosion = BeamExplosionVfx:Clone()
 	newBeamExplosion:PivotTo(CFrame.new(Position))
 	newBeamExplosion.Parent = game.Workspace
-
 	Debris:AddItem(newBeamExplosion, 2.5)
 
 	for _, part in pairs(newBeamExplosion:GetChildren()) do
@@ -70,15 +73,12 @@ local function fireBeamExplosion(actionName: string, inputState: Enum)
 			AttackDebounce = true
 
 			local mouseLocation = MouseModule.getWorldMousePosition()
-
 			local targetDirection = (mouseLocation - Character:FindFirstChild("HumanoidRootPart").Position).Unit
-
 			local directionVector = targetDirection * MAX_CAST_DISTANCE
 			
 			local spellRaycastParams = RaycastParams.new()
 			spellRaycastParams.FilterDescendantsInstances = {Character}
 			local spellRaycastResult = workspace:Raycast(Character:FindFirstChild("LeftHand").Position, directionVector, spellRaycastParams)
-
 			local hitPosition
 
 			if spellRaycastResult then
@@ -110,5 +110,6 @@ local function fireBeamExplosion(actionName: string, inputState: Enum)
 	end
 end
 
+-- Connections
 BeamExplosionRemote.OnClientEvent:Connect(generateBeamExplosionVfx)
 ContextActionService:BindAction(ACTION_BEAM_EXPLOSION, fireBeamExplosion, true, Enum.KeyCode.Q)

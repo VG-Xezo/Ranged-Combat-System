@@ -1,30 +1,31 @@
+-- Services
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
+-- Remote Events/Replicated Storage
 local BeamExplosionRemote = ReplicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("BeamExplosion")
 local ShakeCameraEvent = game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("ShakeCamera")
 
+-- Modules
+local Sanitychecks = require(game:GetService("ServerScriptService").Sanitychecks)
+local UpdateStaminas = require(game:GetService("ServerScriptService").UpdateStaminas)
+
+-- Move vars
 local Cooldown = 2.5
 local MAX_CAST_DISTANCE = 50
 local MOVE_COST = 100
 local PlayerDebounces = {}
 
-local Sanitychecks = require(game:GetService("ServerScriptService").Sanitychecks)
-local UpdateStaminas = require(game:GetService("ServerScriptService").UpdateStaminas)
-
+-- Functions
 function BeamExplosion(playerFired: Player, ExplosionPosition: Vector3)
     if table.find(PlayerDebounces, playerFired.Name) == nil then
-        
         local playerHumanoidRootPart = playerFired.Character:FindFirstChild("HumanoidRootPart")
 
         local inRange = Sanitychecks.checkDistance(playerFired, playerHumanoidRootPart.Position, ExplosionPosition, MAX_CAST_DISTANCE)
         local staminaEnough = UpdateStaminas.decreaseStamina(playerFired, MOVE_COST)
-
-
         if not inRange then return end
         if not staminaEnough then return end
 
-        -- Create Hitbox
         for _, characterModel in pairs(game.Workspace:GetChildren()) do
             if characterModel:IsA("Model") and characterModel ~= playerFired.Character then
                 local HumanoidRootPart = characterModel:FindFirstChild("HumanoidRootPart", true)
@@ -50,4 +51,5 @@ function BeamExplosion(playerFired: Player, ExplosionPosition: Vector3)
     end
 end
 
+-- Connections
 BeamExplosionRemote.OnServerEvent:Connect(BeamExplosion)

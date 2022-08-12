@@ -1,8 +1,11 @@
+-- Services
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
+-- Remote Events/Replicated Storage
 local StaminasFolder = ReplicatedStorage:WaitForChild("StaminasFolder")
 
+-- Functions
 function updateStaminas()
     while true do
         for _, staminaValue in pairs(StaminasFolder:GetChildren()) do
@@ -16,10 +19,10 @@ function updateStaminas()
         task.wait(2)
     end
 end
-
 local StaminaThread = coroutine.wrap(updateStaminas)
 StaminaThread()
 
+-- Connections
 Players.PlayerAdded:Connect(function(player: Player)
     local playerStamina = Instance.new("IntValue", StaminasFolder)
     playerStamina.Name = player.UserId

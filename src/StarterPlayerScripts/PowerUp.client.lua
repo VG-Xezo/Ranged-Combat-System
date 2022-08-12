@@ -1,35 +1,38 @@
--- Gives player speed and jump boost
+-- Services
 local Players = game:GetService("Players")
 local ContextActionService = game:GetService("ContextActionService")
 local Debris = game:GetService("Debris")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+-- Remote Events/Replicated Storage
+local PowerUpRemote = ReplicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("PowerUp")
+local PlayerStamina = ReplicatedStorage:WaitForChild("StaminasFolder"):WaitForChild(player.UserId)
+
+-- Player vars
 local player = Players.LocalPlayer
 local Character = player.Character
 if not Character then
     player.CharacterAdded:Wait()
     Character = player.Character
 end
-
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local PowerUpRemote = ReplicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("PowerUp")
-local PlayerStamina = ReplicatedStorage:WaitForChild("StaminasFolder"):WaitForChild(player.UserId)
-
 local humanoid = Character:WaitForChild("Humanoid")
 local Animator = humanoid:WaitForChild("Animator")
 
-local PlayerBarModule = require(script.Parent:WaitForChild("ConfigPlayerBar"))
-
+-- Animation/Vfx vars
 local powerupAnimationTrack = Animator:LoadAnimation(Character:WaitForChild("Animations").PowerupAnimation)
 powerupAnimationTrack.Priority = Enum.AnimationPriority.Action
 
+-- Modules
+local PlayerBarModule = require(script.Parent:WaitForChild("ConfigPlayerBar"))
+
+-- Move vars
 local MOVE_COST = 250
-
 local ACTION_POWERUP = "Power Up"
-
 local ORIGINAL_SPEED = 0
-
 local AttackDebounce = false
 local AttackCooldown = 10
 
+-- Functions
 local function generatePowerupVfx(playerFired: Player)
     local powerUpAura = ReplicatedStorage:WaitForChild("VFX"):WaitForChild("PowerupAura").PowerupVfx:Clone()
     powerUpAura.Parent = playerFired.Character:FindFirstChild("HumanoidRootPart")
@@ -63,5 +66,6 @@ local function firePowerUp(actionName: string, inputState: Enum)
     end
 end
 
+-- Connections
 PowerUpRemote.OnClientEvent:Connect(generatePowerupVfx)
 ContextActionService:BindAction(ACTION_POWERUP, firePowerUp, true, Enum.KeyCode.P)

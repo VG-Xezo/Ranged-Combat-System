@@ -1,16 +1,21 @@
+-- Services
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+-- Remote Events/Replicated Storage
 local LightningRemote = ReplicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("Lightning")
 local ShakeCameraEvent = game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("ShakeCamera")
 
+-- Modules
 local UpdateStaminas = require(game:GetService("ServerScriptService"):WaitForChild("UpdateStaminas"))
 
+-- Move vars
 local PlayerDebounces = {}
-
 local MOVE_COST = 225
 local MAX_RANGE_DISTANCE = 25
 local Cooldown = 5
 
+-- Functions
 function LightningStrikes(playerFired: Player)
     if table.find(PlayerDebounces, playerFired.Name) == nil then
         local staminaEnough = UpdateStaminas.decreaseStamina(playerFired, MOVE_COST)
@@ -40,7 +45,6 @@ function LightningStrikes(playerFired: Player)
                 end
             end
         end
-
         
         table.insert(PlayerDebounces, playerFired.Name)
         task.wait(Cooldown)
