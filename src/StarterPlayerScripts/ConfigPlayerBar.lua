@@ -26,7 +26,7 @@ function ConfigPlayerBar.AttackCooldown(attackType: string, cooldown: number)
     
     for i = 10, 0, -1 do
         local TargetSize = UDim2.new(1, 0, i/10, 0)
-        TweenService:Create(FireballMove.CooldownFrame, TweenInfo.new(cooldown/10), {Size = TargetSize}):Play()
+        TweenService:Create(MoveFrame.CooldownFrame, TweenInfo.new(cooldown/10), {Size = TargetSize}):Play()
         task.wait(cooldown/10)
     end
 end

@@ -5,10 +5,6 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ContextActionService = game:GetService("ContextActionService")
 local TweenService = game:GetService("TweenService")
 
--- Remote Events/Replicated Storage
-local BeamExplosionRemote = ReplicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("BeamExplosion")
-local PlayerStamina = ReplicatedStorage:WaitForChild("StaminasFolder"):WaitForChild(Players.LocalPlayer.UserId)
-
 -- Player vars
 local Character = Players.LocalPlayer.Character
 if not Character then
@@ -17,6 +13,10 @@ if not Character then
 end
 local humanoid = Character:WaitForChild("Humanoid")
 local Animator = humanoid:WaitForChild("Animator")
+
+-- Remote Events/Replicated Storage
+local BeamExplosionRemote = ReplicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("BeamExplosion")
+local PlayerStamina = ReplicatedStorage:WaitForChild("StaminasFolder"):WaitForChild(Players.LocalPlayer.UserId)
 
 -- Animation/Vfx vars
 local beamAnimationTrack = Animator:LoadAnimation(Character:WaitForChild("Animations").BeamExplosionAnimation)

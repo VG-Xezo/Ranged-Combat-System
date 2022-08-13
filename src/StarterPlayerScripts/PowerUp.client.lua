@@ -4,10 +4,6 @@ local ContextActionService = game:GetService("ContextActionService")
 local Debris = game:GetService("Debris")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
--- Remote Events/Replicated Storage
-local PowerUpRemote = ReplicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("PowerUp")
-local PlayerStamina = ReplicatedStorage:WaitForChild("StaminasFolder"):WaitForChild(player.UserId)
-
 -- Player vars
 local player = Players.LocalPlayer
 local Character = player.Character
@@ -17,6 +13,10 @@ if not Character then
 end
 local humanoid = Character:WaitForChild("Humanoid")
 local Animator = humanoid:WaitForChild("Animator")
+
+-- Remote Events/Replicated Storage
+local PowerUpRemote = ReplicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("PowerUp")
+local PlayerStamina = ReplicatedStorage:WaitForChild("StaminasFolder"):WaitForChild(player.UserId)
 
 -- Animation/Vfx vars
 local powerupAnimationTrack = Animator:LoadAnimation(Character:WaitForChild("Animations").PowerupAnimation)

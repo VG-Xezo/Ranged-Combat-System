@@ -4,9 +4,6 @@ local TweenService = game:GetService("TweenService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local StarterGui = game:GetService("StarterGui")
 
--- Replicated Storage
-local playerStamina = ReplicatedStorage:WaitForChild("StaminasFolder"):WaitForChild(player.UserId)
-
 -- Player vars
 local player = Players.LocalPlayer
 local Character = player.Character
@@ -15,6 +12,9 @@ if not Character then
     Character = player.Character
 end
 local playerHeatlh = Character:WaitForChild("Humanoid")
+
+-- Replicated Storage
+local playerStamina = ReplicatedStorage:WaitForChild("StaminasFolder"):WaitForChild(player.UserId)
 
 -- Gui vars
 local PlayerBarGui = player:WaitForChild("PlayerGui"):WaitForChild("PlayerBarGui")

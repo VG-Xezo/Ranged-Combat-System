@@ -5,10 +5,6 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ContextActionService = game:GetService("ContextActionService")
 local TweenService = game:GetService("TweenService")
 
--- Remote Events/Replicated Storage
-local PlayerStamina = ReplicatedStorage:WaitForChild("StaminasFolder"):WaitForChild(player.UserId)
-local FireballRemote = ReplicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("Fireball")
-
 -- Player vars
 local player = Players.LocalPlayer
 local Character = player.Character
@@ -18,6 +14,10 @@ if not Character then
 end
 local humanoid = Character:WaitForChild("Humanoid")
 local Animator = humanoid:WaitForChild("Animator")
+
+-- Remote Events/Replicated Storage
+local PlayerStamina = ReplicatedStorage:WaitForChild("StaminasFolder"):WaitForChild(player.UserId)
+local FireballRemote = ReplicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("Fireball")
 
 -- Animation/Vfx vars
 local fireballAnimationTrack = Animator:LoadAnimation(Character:WaitForChild("Animations").FireballAnimation)

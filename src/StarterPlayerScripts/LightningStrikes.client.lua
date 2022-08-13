@@ -4,10 +4,6 @@ local ContextActionService = game:GetService("ContextActionService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Debris = game:GetService("Debris")
 
--- Remote Events/Replicated Storage
-local PlayerStamina = ReplicatedStorage:WaitForChild("StaminasFolder"):WaitForChild(player.UserId)
-local LightningRemote = ReplicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("Lightning")
-
 -- Player vars
 local player = Players.LocalPlayer
 local Character = player.Character
@@ -18,6 +14,10 @@ end
 local humanoid = Character:WaitForChild("Humanoid")
 local HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
 local Animator = humanoid:WaitForChild("Animator")
+
+-- Remote Events/Replicated Storage
+local PlayerStamina = ReplicatedStorage:WaitForChild("StaminasFolder"):WaitForChild(player.UserId)
+local LightningRemote = ReplicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("Lightning")
 
 -- Animation/Vfx vars
 local BoltVfx = ReplicatedStorage:WaitForChild("VFX"):WaitForChild("Bolt")
